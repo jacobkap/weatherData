@@ -4,7 +4,7 @@
 \alias{getSummarizedWeather}
 \title{Gets daily summary weather data (One record per day)}
 \usage{
-getSummarizedWeather(station_id, start_date, end_date = start_date,
+getSummarizedWeather(station_id, start_date, end_date = NULL,
   station_type = "airportCode", opt_temperature_columns = TRUE,
   opt_all_columns = FALSE, opt_custom_columns = FALSE,
   custom_columns = NULL, opt_verbose = FALSE)

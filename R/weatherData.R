@@ -160,7 +160,7 @@ getDetailedWeather <- function(station_id,
 #' @export
 getSummarizedWeather <- function(station_id, 
                                  start_date, 
-                                 end_date=start_date,
+                                 end_date=NULL,
                                  station_type="airportCode",
                                  opt_temperature_columns=TRUE,
                                  opt_all_columns=FALSE,
@@ -185,7 +185,7 @@ getSummarizedWeather <- function(station_id,
 
   custom_url <- createWU_Custom_URL(station_id, 
                                     years[1], 
-                                    years[2],
+                                    years[length(years)],
                                     station_type,
                                     opt_verbose)
   if (opt_verbose) {
