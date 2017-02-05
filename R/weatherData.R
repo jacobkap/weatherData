@@ -175,17 +175,24 @@ getSummarizedWeather <- function(station_id,
     stop("\nInput parameters Invalid.")
     return(NULL)
   }
+  
+  
+  years <- c(as.Date(start_date), seq.Date(as.Date(start_date), as.Date(end_date), by = "year"))
+  if (as.Date(end_date) > years[length(years)]) {
+    years <- c(years, as.Date(end_date))
+  }
+  years <- years[!duplicated(years)]
 
   custom_url <- createWU_Custom_URL(station_id, 
-                                    start_date, 
-                                    end_date,
+                                    years[1], 
+                                    years[2],
                                     station_type,
                                     opt_verbose)
-  if(opt_verbose){
+  if (opt_verbose) {
     message(sprintf("Retrieving from: %s", custom_url))    
   }  
   wxdata <- readUrl(custom_url)
-  if(!isObtainedDataValid(wxdata, station_id, custom_url)) return(NULL)
+  if (!isObtainedDataValid(wxdata, station_id, custom_url)) return(NULL)
   
   df <- cleanAndSubsetObtainedData(wxdata,
                                    opt_temperature_columns,
@@ -193,6 +200,26 @@ getSummarizedWeather <- function(station_id,
                                    opt_custom_columns,
                                    custom_columns,
                                    opt_verbose)
+  years <- years[-1]
+  
+  while (length(years) > 0) {
+    custom_url <- createWU_Custom_URL(station_id, 
+                                      years[1], 
+                                      years[length(years)],
+                                      station_type,
+                                      opt_verbose)
+    wxdata <- readUrl(custom_url)
+    df <- rbind(df,  cleanAndSubsetObtainedData(wxdata,
+                                                opt_temperature_columns,
+                                                opt_all_columns,
+                                                opt_custom_columns,
+                                                custom_columns,
+                                                opt_verbose))
+    years <- years[-1]
+    
+  }
+  df <- df[!duplicated(df$Date),]
+  
     
   return(df)
 }
