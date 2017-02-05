@@ -160,7 +160,7 @@ getDetailedWeather <- function(station_id,
 #' @export
 getSummarizedWeather <- function(station_id, 
                                  start_date, 
-                                 end_date=NULL,
+                                 end_date=start_date,
                                  station_type="airportCode",
                                  opt_temperature_columns=TRUE,
                                  opt_all_columns=FALSE,
